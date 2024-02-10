@@ -4,8 +4,8 @@
    <h2 style="font-size: 1.2rem; margin-top: 2rem; margin-bottom: 2rem; background-color: #F2F2F2;padding: 2rem;">
      Haz click en start y luego una pregunta de si o no  
    </h2>
-  <button @click="recognitionStart" style="justify-self: start; width: 10rem; height: 3rem;color:#F2F2F2; background-color: black;" class=" btn btn-primary ">
-      start
+  <button @click="recognitionStart" :class="{'pulse-button':isloading} " style="font-size: larger; justify-self: start; width: 10rem; height: 10rem;color:#F2F2F2; background-color: red;" class=" btn btn-primary rounded-full">
+      {{ buttonContent }}
     </button>
     <br>
     <hr>
@@ -31,7 +31,8 @@ const recognition = new SpeechRecognition();
 const speechRecognitionList = new SpeechGrammarList();
 const output = ref("")
 const colorSelected = ref("red")
- 
+const isloading= ref(false)
+const buttonContent = ref("Start")
 
 voices = speechSynthesis.getVoices();
 
@@ -47,8 +48,11 @@ recognition.maxAlternatives = 1;
 
 
 function recognitionStart() {
-  recognition.start();
+  
   output.value += "Cual es tu pregunta? <br>"
+  recognition.start();
+  isloading.value = true
+  buttonContent.value = "Recording..."
   console.log("Ready to receive a color command.");
 
 };
@@ -63,7 +67,7 @@ function speak(text) {
   clientVoice.pitch = 1
   clientVoice.voice = voices[0]
   speechSynthesis.speak(clientVoice)
-  output.value += `<span style="color:${text.length % 2 == 0?'green':'orange'}" >Respuesta: ${respuesta}  </span> <br>`
+  output.value += `<span  style="color:${text.length % 2 == 0?'green':'orange'}" >Respuesta: ${respuesta}  </span> <br>`
 }
 
 
@@ -74,7 +78,7 @@ const getData = (event) => new Promise((res,rej)=>{
     // console.log(event.results[0][0].transcript[color]) //event.results[0][0].transcript;
     output.value += `Pregunta: ${color}?` + "<br>";
     colorSelected.value = color 
-    
+    buttonContent.value = "Start"
     res()
    }catch(e){
     rej()
@@ -85,6 +89,7 @@ const getData = (event) => new Promise((res,rej)=>{
 recognition.onresult =async (e)=> {
 
   await getData(e)
+  isloading.value = false
   speak(colorSelected.value)
 }
 
@@ -117,4 +122,23 @@ opacity: 0.8;
 background: radial-gradient(circle, transparent 20%, #e5e5f7 20%, #e5e5f7 80%, transparent 80%, transparent), radial-gradient(circle, transparent 20%, #e5e5f7 20%, #e5e5f7 80%, transparent 80%, transparent) 25px 25px, linear-gradient(#444cf7 2px, transparent 2px) 0 -1px, linear-gradient(90deg, #444cf7 2px, #e5e5f7 2px) -1px 0;
 background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
 }
+
+.pulse-button {
+  animation: pulse .5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
 </style>
