@@ -1,14 +1,16 @@
 <template>
-  <section id="section"  
-  style="width: 100dvw;height: 100dvh; display:flex; flex-direction: column; justify-content: center; align-items: center;" :style="`background-color:${colorSelected}`">
-    Haz click en start y luego una pregunta de si o no  
+  <section id="section" class="pattern"  
+  style="width: 100dvw;height: 100dvh; display:flex; flex-direction: column; justify-content: center; align-items: center;" >
+   <h2 style="font-size: 1.2rem; margin-top: 2rem; margin-bottom: 2rem; background-color: #F2F2F2;padding: 2rem;">
+     Haz click en start y luego una pregunta de si o no  
+   </h2>
   <button @click="recognitionStart" style="justify-self: start; width: 10rem; height: 3rem;color:#F2F2F2; background-color: black;" class=" btn btn-primary ">
       start
     </button>
     <br>
     <hr>
     <br>
-    <pre v-html="output" style="overflow-y: scroll; background-color: black;color:#F2F2F2; width: 75dvw; font-size: .5rem; height: 20rem;"></pre>
+    <pre v-html="output" style="overflow-y: scroll; background-color: wheat;color:blue; width: 75dvw; scrollbar-color: transparent; font-size: .75rem; height: 20rem;"></pre>
   </section>
 </template>
 
@@ -61,7 +63,7 @@ function speak(text) {
   clientVoice.pitch = 1
   clientVoice.voice = voices[0]
   speechSynthesis.speak(clientVoice)
-  output.value += `Respuesta: ${respuesta} <br>`
+  output.value += `<span style="color:${text.length % 2 == 0?'green':'orange'}" >Respuesta: ${respuesta}  </span> <br>`
 }
 
 
@@ -108,3 +110,11 @@ recognition.onresult =async (e)=> {
 
 </script>
 
+<style scoped>
+.pattern{
+  background-color: #e5e5f7;
+opacity: 0.8;
+background: radial-gradient(circle, transparent 20%, #e5e5f7 20%, #e5e5f7 80%, transparent 80%, transparent), radial-gradient(circle, transparent 20%, #e5e5f7 20%, #e5e5f7 80%, transparent 80%, transparent) 25px 25px, linear-gradient(#444cf7 2px, transparent 2px) 0 -1px, linear-gradient(90deg, #444cf7 2px, #e5e5f7 2px) -1px 0;
+background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+}
+</style>
