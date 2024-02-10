@@ -10,7 +10,7 @@
     <br>
     <hr>
     <br>
-    <pre v-html="output" style="overflow-y: scroll; background-color: wheat;color:blue; width: 75dvw; scrollbar-color: transparent; font-size: .75rem; height: 20rem;"></pre>
+    <pre class="horizontal-lines-pattern" v-html="output" style="text-wrap: wrap; overflow-y: scroll;  color:blue; width: 75dvw; scrollbar-color: transparent; font-size: .75rem; height: 20rem;"></pre>
   </section>
 </template>
 
@@ -49,7 +49,7 @@ recognition.maxAlternatives = 1;
 
 function recognitionStart() {
   
-  output.value += "Cual es tu pregunta? <br>"
+  // output.value += "Cual es tu pregunta? <br>"
   recognition.start();
   isloading.value = true
   buttonContent.value = "Recording..."
@@ -67,7 +67,7 @@ function speak(text) {
   clientVoice.pitch = 1
   clientVoice.voice = voices[0]
   speechSynthesis.speak(clientVoice)
-  output.value += `<span  style="color:${text.length % 2 == 0?'green':'orange'}" >Respuesta: ${respuesta}  </span> <br>`
+  output.value += `<span  style="color:${text.length % 2 == 0?'green':'orange'}" >Respuesta: ${respuesta}  </span>  <br>`
 }
 
 
@@ -77,8 +77,7 @@ const getData = (event) => new Promise((res,rej)=>{
      const color = event.results[0][0].transcript;
     // console.log(event.results[0][0].transcript[color]) //event.results[0][0].transcript;
     output.value += `Pregunta: ${color}?` + "<br>";
-    colorSelected.value = color 
-    buttonContent.value = "Start"
+    colorSelected.value = color
     res()
    }catch(e){
     rej()
@@ -93,7 +92,13 @@ recognition.onresult =async (e)=> {
   speak(colorSelected.value)
 }
 
-// recognition.onsoundend = () =>
+recognition.onsoundend = () =>{
+
+
+  buttonContent.value = "Start" 
+  isloading.value = false
+}
+
 
 
 // voices = speechSynthesis.getVoices().sort(function (a, b) {
@@ -121,6 +126,12 @@ recognition.onresult =async (e)=> {
 opacity: 0.8;
 background: radial-gradient(circle, transparent 20%, #e5e5f7 20%, #e5e5f7 80%, transparent 80%, transparent), radial-gradient(circle, transparent 20%, #e5e5f7 20%, #e5e5f7 80%, transparent 80%, transparent) 25px 25px, linear-gradient(#444cf7 2px, transparent 2px) 0 -1px, linear-gradient(90deg, #444cf7 2px, #e5e5f7 2px) -1px 0;
 background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+}
+.horizontal-lines-pattern{
+  background-color: #e5e5f7;
+opacity: 0.8;
+background-size: 18px 18px;
+background-image:  repeating-linear-gradient(0deg, #222224, #222224 0.9px, #e5e5f7 0.9px, #e5e5f7); 
 }
 
 .pulse-button {
