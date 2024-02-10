@@ -1,13 +1,14 @@
 <template>
   <section id="section"  
   style="width: 100dvw;height: 100dvh; display:flex; flex-direction: column; justify-content: center; align-items: center;" :style="`background-color:${colorSelected}`">
-    <button @click="recognitionStart" style="justify-self: start; width: 10rem; height: 3rem;color:#F2F2F2; background-color: black;" class=" btn btn-primary ">
+    Haz click en start y luego una pregunta de si o no  
+  <button @click="recognitionStart" style="justify-self: start; width: 10rem; height: 3rem;color:#F2F2F2; background-color: black;" class=" btn btn-primary ">
       start
     </button>
     <br>
     <hr>
     <br>
-    <pre v-html="output" style="background-color: black;color:#F2F2F2; width: 75dvw; font-size: .5rem; height: 20rem;"></pre>
+    <pre v-html="output" style="overflow-y: scroll; background-color: black;color:#F2F2F2; width: 75dvw; font-size: .5rem; height: 20rem;"></pre>
   </section>
 </template>
 
@@ -45,20 +46,22 @@ recognition.maxAlternatives = 1;
 
 function recognitionStart() {
   recognition.start();
-  output.value += "Ready to receive a color command. <br>"
+  output.value += "Cual es tu pregunta? <br>"
   console.log("Ready to receive a color command.");
 
 };
 
 
 function speak(text) {
-  clientVoice.text = text || "hola bienvenido"
+  const respuesta = text.length > 0 ? text.length % 2 == 0 ? "si" : "no" : "lo siento, no entendi"
+  clientVoice.text =  respuesta
   clientVoice.lang = "es-MX"
   clientVoice.volume = 1
   clientVoice.rate = 1
   clientVoice.pitch = 1
   clientVoice.voice = voices[0]
   speechSynthesis.speak(clientVoice)
+  output.value += `Respuesta: ${respuesta} <br>`
 }
 
 
@@ -67,7 +70,7 @@ const getData = (event) => new Promise((res,rej)=>{
    try{
      const color = event.results[0][0].transcript;
     // console.log(event.results[0][0].transcript[color]) //event.results[0][0].transcript;
-    output.value += `Result received: ${color}` + "<br>";
+    output.value += `Pregunta: ${color}?` + "<br>";
     colorSelected.value = color 
     
     res()

@@ -4,5 +4,9 @@ import './style.css'
 
 import 'tailwindcss/tailwind.css'
 
+import { TroisJSVuePlugin } from 'troisjs';
 
-createApp(App).mount('#app')
+
+createApp(App)
+.use(TroisJSVuePlugin)
+.mount('#app')
