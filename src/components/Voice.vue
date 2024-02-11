@@ -75,8 +75,7 @@ function speak(text) {
 const getData = (event) => new Promise((res,rej)=>{
    try{
      const color = event.results[0][0].transcript;
-    // console.log(event.results[0][0].transcript[color]) //event.results[0][0].transcript;
-    output.value += `Pregunta: ${color}?` + "<br>";
+     output.value += `Pregunta: ${color}?` + "<br>";
     colorSelected.value = color
     res()
    }catch(e){
